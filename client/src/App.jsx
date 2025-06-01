@@ -58,7 +58,7 @@ function App() {
   const audioRef = useRef();
   const [summary, setSummary] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalImage, setModalImage] = useState("");
+  const [modalLog, setModalLog] = useState(null);
 
   const snapshotImages = [
     "https://images.pexels.com/photos/9957864/pexels-photo-9957864.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -186,7 +186,7 @@ function App() {
             {
               title: "Snapshot",
               dataIndex: "cctv_image",
-              render: (url) =>
+              render: (url, record) =>
                 url ? (
                   <img
                     src={url}
@@ -194,7 +194,7 @@ function App() {
                     width={40}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                      setModalImage(url);
+                      setModalLog(record);
                       setModalVisible(true);
                     }}
                   />
@@ -215,7 +215,20 @@ function App() {
           width="auto"
           style={{ textAlign: "center" }}
         >
-          <img src={modalImage} alt="snapshot-full" style={{ maxWidth: "90vw", maxHeight: "80vh" }} />
+          {modalLog && (
+            <div>
+              <img src={modalLog.cctv_image} alt="snapshot-full" style={{ maxWidth: "90vw", maxHeight: "60vh", marginBottom: 16 }} />
+              <div style={{ textAlign: "left", margin: "0 auto", maxWidth: 400 }}>
+                <div><b>Nama:</b> {modalLog.name}</div>
+                <div><b>Waktu:</b> {modalLog.time}</div>
+                {modalLog.location && <div><b>Lokasi:</b> {modalLog.location}</div>}
+                {modalLog.violation_type && <div><b>Jenis Pelanggaran:</b> {modalLog.violation_type}</div>}
+                <div><b>Status APD:</b> {modalLog.apd}</div>
+                {modalLog.speed && <div><b>Kecepatan:</b> {modalLog.speed}</div>}
+                {modalLog.action && <div><b>Tindakan:</b> {modalLog.action}</div>}
+              </div>
+            </div>
+          )}
         </Modal>
       </Card>
     </div>
