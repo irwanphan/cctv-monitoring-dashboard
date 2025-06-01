@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Card, Table, Tag, message, Statistic, Row, Col } from "antd";
+import { Button, Card, Table, Tag, message, Statistic, Row, Col, Modal } from "antd";
 import axios from "axios";
 
 const api = axios.create({ baseURL: "http://localhost:3001/api" });
@@ -57,6 +57,8 @@ function App() {
   const [notif, setNotif] = useState(false);
   const audioRef = useRef();
   const [summary, setSummary] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalImage, setModalImage] = useState("");
 
   const snapshotImages = [
     "https://images.pexels.com/photos/9957864/pexels-photo-9957864.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
@@ -184,7 +186,19 @@ function App() {
             {
               title: "Snapshot",
               dataIndex: "cctv_image",
-              render: (url) => url ? <img src={url} alt="snapshot" width={40} /> : "-",
+              render: (url) =>
+                url ? (
+                  <img
+                    src={url}
+                    alt="snapshot"
+                    width={40}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setModalImage(url);
+                      setModalVisible(true);
+                    }}
+                  />
+                ) : "-",
             },
             {
               title: "Foto",
@@ -194,6 +208,15 @@ function App() {
           ]}
           pagination={false}
         />
+        <Modal
+          open={modalVisible}
+          footer={null}
+          onCancel={() => setModalVisible(false)}
+          width="auto"
+          style={{ textAlign: "center" }}
+        >
+          <img src={modalImage} alt="snapshot-full" style={{ maxWidth: "90vw", maxHeight: "80vh" }} />
+        </Modal>
       </Card>
     </div>
   );
