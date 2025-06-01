@@ -58,6 +58,14 @@ function App() {
   const audioRef = useRef();
   const [summary, setSummary] = useState(null);
 
+  const snapshotImages = [
+    "https://images.pexels.com/photos/9957864/pexels-photo-9957864.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/11666974/pexels-photo-11666974.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/11666818/pexels-photo-11666818.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/32355466/pexels-photo-32355466/free-photo-of-charming-european-alleyway-framed-by-open-gate.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/32305004/pexels-photo-32305004/free-photo-of-rustic-industrial-workshop-interior-with-tools.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+  ];
+
   useEffect(() => {
     fetchStatus();
     fetchLogs();
@@ -82,10 +90,11 @@ function App() {
   const triggerViolation = async () => {
     setNotif(true);
     audioRef.current.play();
-    // Tambahkan dummy snapshot jika tidak ada
+    // Pilih snapshot random untuk simulasi snapshot kamera AI
+    const randomSnapshot = snapshotImages[Math.floor(Math.random() * snapshotImages.length)];
     const logWithSnapshot = {
       ...status,
-      cctv_image: status.cctv_image || "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=200&q=80"
+      cctv_image: randomSnapshot
     };
     await api.post("/log", logWithSnapshot);
     fetchLogs();
