@@ -6,9 +6,30 @@ const api = axios.create({ baseURL: "http://localhost:3001/api" });
 
 function CameraStatusPanel() {
   const [cameras, setCameras] = useState([]);
+
+  // Data dummy kamera
+  const dummyCameras = [
+    { id: 'cam1', name: 'APD Gate 1', type: 'APD', status: 'online' },
+    { id: 'cam2', name: 'APD Gate 2', type: 'APD', status: 'offline' },
+    { id: 'cam3', name: 'Speed Point 1', type: 'Speed', status: 'online' },
+    { id: 'cam4', name: 'Speed Point 2', type: 'Speed', status: 'online' },
+    { id: 'cam5', name: 'Speed Point 3', type: 'Speed', status: 'offline' },
+    { id: 'cam6', name: 'Speed Point 4', type: 'Speed', status: 'online' },
+  ];
+
   useEffect(() => {
-    api.get("/cameras").then(res => setCameras(res.data));
+    // Coba fetch dari backend, jika gagal atau kosong, pakai dummy
+    api.get("/cameras")
+      .then(res => {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          setCameras(res.data);
+        } else {
+          setCameras(dummyCameras);
+        }
+      })
+      .catch(() => setCameras(dummyCameras));
   }, []);
+
   return (
     <Card title="Status Kamera" style={{ marginBottom: 24 }}>
       <Row gutter={16}>
